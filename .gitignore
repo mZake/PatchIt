@@ -1,0 +1,8 @@
+/.vscode
+/build
+/debug
+
+*.exe
+*.ips
+*.ups
+*.bps
