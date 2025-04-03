@@ -2,7 +2,7 @@
 
 #include "Error.hpp"
 
-namespace PatchIt
+namespace PatchIt::Core
 {
     bool Error::HasError() const
     {

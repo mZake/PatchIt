@@ -2,9 +2,9 @@
 
 #include <string>
 
-namespace PatchIt
+namespace PatchIt::Core
 {
-    #define MAKE_ERROR(code, msg) Error(code, msg, __FILE__, __LINE__)
+    #define MAKE_ERROR(code, msg) ::PatchIt::Core::Error(code, msg, __FILE__, __LINE__)
 
     enum class ErrorCode
     {
