@@ -10,6 +10,7 @@ namespace PatchIt::Core
     {
         None = 0,
         FileNotFound,
+        FileSize,
         ReadError,
         InvalidFormat,
         BadAlloc,
@@ -19,8 +20,18 @@ namespace PatchIt::Core
     {
     public:
         Error() = default;
+
         Error(ErrorCode code, const std::string& message, const std::string& file, int line)
             : m_Code(code), m_Message(message), m_File(file), m_Line(line) { }
+
+        Error(const Error& other)
+            : m_Code(other.m_Code), m_Message(other.m_Message), m_File(other.m_File), m_Line(other.m_Line) { }
+
+        Error(Error&& other)
+            : m_Code(std::move(other.m_Code)),
+              m_Message(std::move(other.m_Message)),
+              m_File(std::move(other.m_File)),
+              m_Line(std::move(other.m_Line)) { }
 
         bool HasError() const;
         std::string ToString() const;
@@ -38,8 +49,23 @@ namespace PatchIt::Core
     public:
         Result(const Type& value)
             : m_Value(value), m_HasValue(true) { }
+
+        Result(Type&& value)
+            : m_Value(std::move(value)), m_HasValue(true) { }
+        
         Result(const Error& error)
             : m_Error(error), m_HasValue(false) { }
+
+        Result(Error&& error)
+            : m_Error(std::move(error)), m_HasValue(false) { }
+
+        Result(const Result& other)
+            : m_Value(other.m_Value), m_Error(other.m_Error), m_HasValue(other.m_HasValue) { }
+
+        Result(Result&& other)
+            : m_Value(std::move(other.m_Value)),
+              m_Error(std::move(other.m_Error)),
+              m_HasValue(std::move(other.m_HasValue)) { }
 
         bool HasValue() const
         {
@@ -51,7 +77,7 @@ namespace PatchIt::Core
             return m_Value;
         }
 
-        const Type& GetValueOr(const Type& other)
+        const Type& GetValueOr(const Type& other) const
         {
             return m_HasValue ? m_Value : other;
         }
